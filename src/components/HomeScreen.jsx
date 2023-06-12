@@ -1,11 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
 
 const HomeScreen = () => {
-    const { availableItems, type, setType } = useContext(AppContext);
+    const { availableItems, type, setType, selectedItems, setSelectedItems } =
+        useContext(AppContext);
     const navigate = useNavigate();
     console.log(availableItems?.data?.length);
+    useEffect(() => {
+        if (selectedItems.length === 3) {
+            navigate("/");
+            setSelectedItems([]);
+        }
+    }, [selectedItems, navigate, setSelectedItems]);
 
     const handleButtonClick = (itemType) => {
         setType(itemType);

@@ -1,16 +1,31 @@
 import React, { useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
 
 const ClothingItemsScreen = () => {
     const { type } = useParams();
-    const { availableItems } = useContext(AppContext);
+    const { availableItems, setType, selectedItems, setSelectedItems } =
+        useContext(AppContext);
+    const navigate = useNavigate();
 
-    // Filter clothing items based on the type parameter
     const filteredItems = availableItems.data.filter(
         (item) => item.type === type
     );
-    console.log(type);
+
+    const clothingTypes = ["shoes", "shirt", "pants"];
+
+    const handleButtonClick = (itemType, item) => {
+        setType(itemType);
+        setSelectedItems([...selectedItems, item]);
+        const currentIndex = clothingTypes.indexOf(itemType);
+        if (selectedItems.length + 1 === 3) {
+            navigate("/");
+        } else {
+            const nextIndex = (currentIndex + 1) % clothingTypes.length;
+            const nextType = clothingTypes[nextIndex];
+            navigate(`/items/${nextType}`);
+        }
+    };
 
     return (
         <div className="container">
@@ -25,14 +40,21 @@ const ClothingItemsScreen = () => {
                                 alt={item.type}
                             />
                             <div className="card-body">
-                                <h5 className="card-title">{item.brand}</h5>
+                                <p className="card-text">
+                                    <strong>מותג:</strong> {item.brand}
+                                </p>
                                 <p className="card-text">
                                     <strong>צבע:</strong> {item.color}
                                 </p>
                                 <p className="card-text">
                                     <strong>מידה:</strong> {item.size}
                                 </p>
-                                <button className="btn btn-primary">
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={() =>
+                                        handleButtonClick(type, item)
+                                    }
+                                >
                                     בחירה
                                 </button>
                             </div>

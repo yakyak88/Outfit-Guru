@@ -5,6 +5,8 @@ export const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
     const [availableItems, setAvailableItems] = useState([]);
+    const [selectedItems, setSelectedItems] = useState([]);
+
     const [type, setType] = useState("");
 
     useEffect(() => {
@@ -27,7 +29,15 @@ const AppContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <AppContext.Provider value={{ availableItems, type, setType }}>
+        <AppContext.Provider
+            value={{
+                availableItems,
+                type,
+                setType,
+                selectedItems,
+                setSelectedItems,
+            }}
+        >
             {children}
         </AppContext.Provider>
     );
