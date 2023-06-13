@@ -6,11 +6,22 @@ export const AppContext = createContext();
 const AppContextProvider = ({ children }) => {
     const [availableItems, setAvailableItems] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
+    const [completedSets, setCompletedSets] = useState([]);
     const [type, setType] = useState("");
     const removeItemsFromStock = (itemsToRemove) => {
         setAvailableItems(
             availableItems.filter((item) => !itemsToRemove.includes(item))
         );
+    };
+    const addToStock = (items) => {
+        setAvailableItems((prevItems) => [...prevItems, ...items]);
+    };
+
+    const deleteSet = (index) => {
+        const newSets = [...completedSets];
+        const deletedSet = newSets.splice(index, 1);
+        addToStock(deletedSet[0]); // deletedSet is an array of arrays, we need the first element
+        setCompletedSets(newSets);
     };
 
     useEffect(() => {
@@ -40,6 +51,9 @@ const AppContextProvider = ({ children }) => {
                 selectedItems,
                 setSelectedItems,
                 removeItemsFromStock,
+                setCompletedSets,
+                completedSets,
+                deleteSet,
             }}
         >
             {children}

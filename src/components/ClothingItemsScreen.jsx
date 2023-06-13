@@ -9,6 +9,7 @@ const ClothingItemsScreen = () => {
         selectedItems,
         setSelectedItems,
         removeItemsFromStock,
+        setCompletedSets,
     } = useContext(AppContext);
     const navigate = useNavigate();
 
@@ -73,6 +74,7 @@ const ClothingItemsScreen = () => {
 
         if (newSelectedItems.length === 3) {
             removeItemsFromStock(newSelectedItems);
+            setCompletedSets((prevSets) => [...prevSets, newSelectedItems]);
             alert("הסט נבחר בהצלחה!");
             navigate("/");
         } else {
@@ -84,7 +86,7 @@ const ClothingItemsScreen = () => {
     return (
         <div className="container">
             <button
-                className="btn btn-light mb-3"
+                className="btn btn-light border mb-3"
                 type="button"
                 onClick={() => setShowFilters(!showFilters)}
             >
