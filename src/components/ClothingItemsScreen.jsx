@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
 
@@ -12,9 +12,54 @@ const ClothingItemsScreen = () => {
     } = useContext(AppContext);
     const navigate = useNavigate();
 
-    const filteredItems = availableItems.filter((item) => item.type === type);
+    const [filterColor, setFilterColor] = useState([]);
+    const [filterSize, setFilterSize] = useState([]);
+    const [showFilters, setShowFilters] = useState(false);
+
+    const handleColorChange = (color) => {
+        setFilterColor((prevColors) =>
+            prevColors.includes(color)
+                ? prevColors.filter((c) => c !== color)
+                : [...prevColors, color]
+        );
+    };
+
+    const handleSizeChange = (size) => {
+        setFilterSize((prevSizes) =>
+            prevSizes.includes(size)
+                ? prevSizes.filter((s) => s !== size)
+                : [...prevSizes, size]
+        );
+    };
+    const filteredItems = availableItems
+        .filter((item) => item.type === type)
+        .filter((item) =>
+            filterColor.length > 0 ? filterColor.includes(item.color) : true
+        )
+        .filter((item) =>
+            filterSize.length > 0 ? filterSize.includes(item.size) : true
+        );
 
     const clothingTypes = ["shoes", "shirt", "pants"];
+
+    const colors = ["black", "white", "red", "green", "pink"];
+    const sizes = [
+        "S",
+        "L",
+        "XL",
+        "XXL",
+        30,
+        31,
+        32,
+        34,
+        35,
+        36,
+        39,
+        42,
+        43,
+        45,
+        48,
+    ];
 
     const getNextType = (currentType) => {
         const currentIndex = clothingTypes.indexOf(currentType);
@@ -28,6 +73,7 @@ const ClothingItemsScreen = () => {
 
         if (newSelectedItems.length === 3) {
             removeItemsFromStock(newSelectedItems);
+            alert("הסט נבחר בהצלחה!");
             navigate("/");
         } else {
             const nextType = getNextType(itemType);
@@ -37,7 +83,71 @@ const ClothingItemsScreen = () => {
 
     return (
         <div className="container">
-            <h1 className="mt-5 text-center">בחירת פריט לבוש - {type}</h1>
+            <button
+                className="btn btn-light mb-3"
+                type="button"
+                onClick={() => setShowFilters(!showFilters)}
+            >
+                סינון
+            </button>
+            {showFilters && (
+                <div className="card mb-3">
+                    <div className="card-body">
+                        <div className="mb-3">
+                            <span>סנן לפי צבע:</span>
+                            <div className="d-flex flex-wrap">
+                                {colors.map((color) => (
+                                    <div className="form-check" key={color}>
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id={`color-${color}`}
+                                            checked={filterColor.includes(
+                                                color
+                                            )}
+                                            onChange={() =>
+                                                handleColorChange(color)
+                                            }
+                                        />
+                                        <label
+                                            className="form-check-label"
+                                            htmlFor={`color-${color}`}
+                                        >
+                                            {color}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div>
+                            <span>סנן לפי מידה:</span>
+                            <div className="d-flex flex-wrap">
+                                {sizes.map((size) => (
+                                    <div className="form-check" key={size}>
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id={`size-${size}`}
+                                            checked={filterSize.includes(size)}
+                                            onChange={() =>
+                                                handleSizeChange(size)
+                                            }
+                                        />
+                                        <label
+                                            className="form-check-label"
+                                            htmlFor={`size-${size}`}
+                                        >
+                                            {size}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <h1 className="mt-5 text-center">בחירת - {type}</h1>
             <div className="row mt-5">
                 {filteredItems.map((item) => (
                     <div className="col-6 col-md-4 mb-4" key={item.id}>
