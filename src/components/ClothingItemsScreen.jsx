@@ -6,29 +6,31 @@ const ClothingItemsScreen = () => {
     const { type } = useParams();
     const {
         availableItems,
-        setType,
         selectedItems,
         setSelectedItems,
         removeItemsFromStock,
     } = useContext(AppContext);
     const navigate = useNavigate();
 
-    const filteredItems = availableItems.data.filter(
-        (item) => item.type === type
-    );
+    const filteredItems = availableItems.filter((item) => item.type === type);
 
     const clothingTypes = ["shoes", "shirt", "pants"];
 
+    const getNextType = (currentType) => {
+        const currentIndex = clothingTypes.indexOf(currentType);
+        const nextIndex = (currentIndex + 1) % clothingTypes.length;
+        return clothingTypes[nextIndex];
+    };
+
     const handleButtonClick = (itemType, item) => {
-        setType(itemType);
-        setSelectedItems([...selectedItems, item]);
-        const currentIndex = clothingTypes.indexOf(itemType);
-        if (selectedItems.length + 1 === 3) {
-            removeItemsFromStock(selectedItems);
+        const newSelectedItems = [...selectedItems, item];
+        setSelectedItems(newSelectedItems);
+
+        if (newSelectedItems.length === 3) {
+            removeItemsFromStock(newSelectedItems);
             navigate("/");
         } else {
-            const nextIndex = (currentIndex + 1) % clothingTypes.length;
-            const nextType = clothingTypes[nextIndex];
+            const nextType = getNextType(itemType);
             navigate(`/items/${nextType}`);
         }
     };

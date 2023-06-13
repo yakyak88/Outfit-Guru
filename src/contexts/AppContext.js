@@ -21,9 +21,7 @@ const AppContextProvider = ({ children }) => {
                 );
                 const data = await response.data;
 
-                setAvailableItems({
-                    data,
-                });
+                setAvailableItems(data);
                 console.log(availableItems);
             } catch (error) {
                 console.log("Error fetching data from the API:", error);

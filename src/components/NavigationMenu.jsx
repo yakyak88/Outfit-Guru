@@ -52,10 +52,10 @@ const NavigationMenu = () => {
                                 <li className="nav-item">
                                     <Link
                                         className="nav-link"
-                                        to="/build-outfit"
+                                        to="/items/shoes"
                                         onClick={closeMenu}
                                     >
-                                        בניית סט לבוש
+                                        בניית סט חדש
                                     </Link>
                                 </li>
                             </ul>

@@ -6,7 +6,7 @@ const HomeScreen = () => {
     const { availableItems, type, setType, selectedItems, setSelectedItems } =
         useContext(AppContext);
     const navigate = useNavigate();
-    console.log(availableItems?.data?.length);
+    console.log(availableItems?.length);
     useEffect(() => {
         if (selectedItems.length === 3) {
             navigate("/");
@@ -19,7 +19,7 @@ const HomeScreen = () => {
         navigate(`/items/${itemType}`);
     };
     return (
-        availableItems?.data?.length > 0 && (
+        availableItems?.length > 0 && (
             <div className="container">
                 <h1 className="mt-5 text-center ">OUTFIT_GURU</h1>
                 <div className="mt-5 text-center">
@@ -29,7 +29,7 @@ const HomeScreen = () => {
                     <h5 className="mb-4     ">
                         <span className="fw-bold">נעליים זמינות:</span>{" "}
                         {
-                            availableItems.data.filter(
+                            availableItems.filter(
                                 (item) => item.type === "shoes"
                             ).length
                         }
@@ -38,7 +38,7 @@ const HomeScreen = () => {
                     <h5 className="mb-4     ">
                         <span className="fw-bold">חולצות זמינות:</span>{" "}
                         {
-                            availableItems.data.filter(
+                            availableItems.filter(
                                 (item) => item.type === "shirt"
                             ).length
                         }
@@ -46,7 +46,7 @@ const HomeScreen = () => {
                     <h5 className="mb-4     ">
                         <span className="fw-bold">מכנסיים זמינים:</span>{" "}
                         {
-                            availableItems.data.filter(
+                            availableItems.filter(
                                 (item) => item.type === "pants"
                             ).length
                         }
