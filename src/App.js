@@ -5,11 +5,12 @@ import ClothingItemsScreen from "./components/ClothingItemsScreen";
 import SavedSetsScreen from "./components/SavedSetsScreen";
 import "./App.css";
 import NavigationMenu from "./components/NavigationMenu";
-
+import LogoBanner from "./components/LogoBanner";
 function App() {
     return (
         <Router>
             <NavigationMenu />
+            <LogoBanner />
             <Routes>
                 <Route path="/" exact element={<HomeScreen />} />
                 <Route path="/items/:type" element={<ClothingItemsScreen />} />

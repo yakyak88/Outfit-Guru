@@ -3,8 +3,13 @@ import { AppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
 
 const HomeScreen = () => {
-    const { availableItems, type, setType, selectedItems, setSelectedItems } =
-        useContext(AppContext);
+    const {
+        availableItems,
+        completedSets,
+        setType,
+        selectedItems,
+        setSelectedItems,
+    } = useContext(AppContext);
     const navigate = useNavigate();
     console.log(availableItems?.length);
     useEffect(() => {
@@ -23,8 +28,9 @@ const HomeScreen = () => {
             <div className="container">
                 <h1 className="mt-5 text-center ">OUTFIT_GURU</h1>
                 <div className="mt-5 text-center">
-                    <h5 className="mb-4     ">
+                    <h5 className="mb-4 ">
                         <span className="fw-bold">סטים שמורים:</span>{" "}
+                        {completedSets.length}
                     </h5>
                     <h5 className="mb-4     ">
                         <span className="fw-bold">נעליים זמינות:</span>{" "}
@@ -54,19 +60,19 @@ const HomeScreen = () => {
                 </div>
                 <div className="mt-5 d-flex justify-content-center">
                     <button
-                        className="btn btn-primary me-3"
+                        className="btn btn-light border me-3"
                         onClick={() => handleButtonClick("shoes")}
                     >
                         בחירת נעליים
                     </button>
                     <button
-                        className="btn btn-success me-3"
+                        className="btn btn-light border me-3"
                         onClick={() => handleButtonClick("shirt")}
                     >
                         בחירת חולצה
                     </button>
                     <button
-                        className="btn btn-info me-3"
+                        className="btn btn-light border me-3"
                         onClick={() => handleButtonClick("pants")}
                     >
                         בחירת מכנסיים

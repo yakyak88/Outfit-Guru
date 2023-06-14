@@ -3,10 +3,14 @@ import { AppContext } from "../contexts/AppContext";
 
 const SavedSetsScreen = () => {
     const { completedSets, deleteSet } = useContext(AppContext);
+    console.log(completedSets);
 
     return (
         <div className="container">
             <h1 className="text-center my-5">הסטים שלי</h1>
+            {completedSets.length === 0 && (
+                <h5 className="text-center my-5">אין סטים שמורים</h5>
+            )}
             <div className="row">
                 {completedSets.map((set, index) => (
                     <div className="col-lg-4 col-md-6 mb-4" key={index}>

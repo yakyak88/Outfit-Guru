@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
 
@@ -13,56 +13,44 @@ const ClothingItemsScreen = () => {
     } = useContext(AppContext);
     const navigate = useNavigate();
 
-    const [filterColor, setFilterColor] = useState([]);
-    const [filterSize, setFilterSize] = useState([]);
     const [showFilters, setShowFilters] = useState(false);
+    const [filters, setFilters] = useState({ color: [], size: [] });
 
-    const handleColorChange = (color) => {
-        setFilterColor((prevColors) =>
-            prevColors.includes(color)
-                ? prevColors.filter((c) => c !== color)
-                : [...prevColors, color]
-        );
+    useEffect(() => {
+        // Reset filters when the type changes
+        setFilters({ color: [], size: [] });
+    }, [type]);
+
+    const handleFilterChange = (filterType, value) => {
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [filterType]: prevFilters[filterType].includes(value)
+                ? prevFilters[filterType].filter((v) => v !== value)
+                : [...prevFilters[filterType], value],
+        }));
     };
 
-    const handleSizeChange = (size) => {
-        setFilterSize((prevSizes) =>
-            prevSizes.includes(size)
-                ? prevSizes.filter((s) => s !== size)
-                : [...prevSizes, size]
-        );
-    };
-    const filteredItems = availableItems
-        .filter((item) => item.type === type)
+    const allItemsOfType = availableItems.filter((item) => item.type === type);
+
+    const filteredItems = allItemsOfType
         .filter((item) =>
-            filterColor.length > 0 ? filterColor.includes(item.color) : true
+            filters.color.length > 0 ? filters.color.includes(item.color) : true
         )
         .filter((item) =>
-            filterSize.length > 0 ? filterSize.includes(item.size) : true
+            filters.size.length > 0 ? filters.size.includes(item.size) : true
         );
+    const itemsToDisplay =
+        filters.color.length > 0 || filters.size.length > 0
+            ? filteredItems.length > 0
+                ? filteredItems
+                : allItemsOfType
+            : allItemsOfType;
 
-    const clothingTypes = ["shoes", "shirt", "pants"];
-
-    const colors = ["black", "white", "red", "green", "pink"];
-    const sizes = [
-        "S",
-        "L",
-        "XL",
-        "XXL",
-        30,
-        31,
-        32,
-        34,
-        35,
-        36,
-        39,
-        42,
-        43,
-        45,
-        48,
-    ];
+    const colors = [...new Set(allItemsOfType.map((item) => item.color))];
+    const sizes = [...new Set(allItemsOfType.map((item) => item.size))];
 
     const getNextType = (currentType) => {
+        const clothingTypes = ["shoes", "shirt", "pants"];
         const currentIndex = clothingTypes.indexOf(currentType);
         const nextIndex = (currentIndex + 1) % clothingTypes.length;
         return clothingTypes[nextIndex];
@@ -86,12 +74,15 @@ const ClothingItemsScreen = () => {
     return (
         <div className="container">
             <button
-                className="btn btn-light border mb-3"
+                className={`btn btn-light border mb-3 ${
+                    showFilters ? "active" : ""
+                }`}
                 type="button"
                 onClick={() => setShowFilters(!showFilters)}
             >
                 סינון
             </button>
+
             {showFilters && (
                 <div className="card mb-3">
                     <div className="card-body">
@@ -104,11 +95,14 @@ const ClothingItemsScreen = () => {
                                             className="form-check-input"
                                             type="checkbox"
                                             id={`color-${color}`}
-                                            checked={filterColor.includes(
+                                            checked={filters.color.includes(
                                                 color
                                             )}
                                             onChange={() =>
-                                                handleColorChange(color)
+                                                handleFilterChange(
+                                                    "color",
+                                                    color
+                                                )
                                             }
                                         />
                                         <label
@@ -130,9 +124,11 @@ const ClothingItemsScreen = () => {
                                             className="form-check-input"
                                             type="checkbox"
                                             id={`size-${size}`}
-                                            checked={filterSize.includes(size)}
+                                            checked={filters.size.includes(
+                                                size
+                                            )}
                                             onChange={() =>
-                                                handleSizeChange(size)
+                                                handleFilterChange("size", size)
                                             }
                                         />
                                         <label
@@ -151,7 +147,7 @@ const ClothingItemsScreen = () => {
 
             <h1 className="mt-5 text-center">בחירת - {type}</h1>
             <div className="row mt-5">
-                {filteredItems.map((item) => (
+                {itemsToDisplay.map((item) => (
                     <div className="col-6 col-md-4 mb-4" key={item.id}>
                         <div className="card clothing-card">
                             <img
@@ -175,7 +171,7 @@ const ClothingItemsScreen = () => {
                                     </p>
                                 )}
                                 <button
-                                    className="btn btn-primary"
+                                    className="btn btn-light border"
                                     onClick={() =>
                                         handleButtonClick(type, item)
                                     }
