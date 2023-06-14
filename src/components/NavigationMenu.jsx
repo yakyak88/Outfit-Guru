@@ -14,7 +14,7 @@ const NavigationMenu = () => {
 
     return (
         <div style={{ direction: "ltr" }}>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div className="container">
                     <div></div>
                     <div style={{ direction: "rtl" }}>

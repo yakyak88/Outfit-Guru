@@ -10,7 +10,7 @@ function App() {
     return (
         <Router>
             <NavigationMenu />
-            <LogoBanner />
+
             <Routes>
                 <Route path="/" exact element={<HomeScreen />} />
                 <Route path="/items/:type" element={<ClothingItemsScreen />} />

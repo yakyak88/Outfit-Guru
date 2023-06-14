@@ -1,6 +1,7 @@
 body {
     text-align: center;
     direction: rtl;
+    padding-top: 70px;
 }
 .clothing-card {
     border: none;
