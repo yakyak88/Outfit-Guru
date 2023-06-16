@@ -56,16 +56,6 @@ const ClothingItemsScreen = () => {
         const nextIndex = (currentIndex + 1) % clothingTypes.length;
         return clothingTypes[nextIndex];
     };
-    const rateRemainingItems = () => {
-        if (selectedItems.length === 1) {
-            const firstItem = selectedItems[0];
-            console.log(firstItem);
-        }
-    };
-
-    useEffect(() => {
-        rateRemainingItems();
-    }, [selectedItems]);
 
     const handleButtonClick = (itemType, item) => {
         const newSelectedItems = [...selectedItems, item];
@@ -115,7 +105,7 @@ const ClothingItemsScreen = () => {
                                 </p>
                                 {selectedItems.length > 0 && (
                                     <p className="card-text fs-6">
-                                        <strong> התאמה:</strong> 90%
+                                        <strong>המלצת הגורו:</strong> מומלץ מאוד
                                     </p>
                                 )}
                                 <button

@@ -23,6 +23,9 @@ const AppContextProvider = ({ children }) => {
         addToStock(deletedSet[0]); // deletedSet is an array of arrays, we need the first element
         setCompletedSets(newSets);
     };
+    const resetSelectedItems = () => {
+        setSelectedItems([]);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,7 +36,6 @@ const AppContextProvider = ({ children }) => {
                 const data = await response.data;
 
                 setAvailableItems(data);
-                console.log(availableItems);
             } catch (error) {
                 console.log("Error fetching data from the API:", error);
             }
@@ -54,6 +56,7 @@ const AppContextProvider = ({ children }) => {
                 setCompletedSets,
                 completedSets,
                 deleteSet,
+                resetSelectedItems,
             }}
         >
             {children}

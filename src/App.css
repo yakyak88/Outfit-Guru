@@ -2,6 +2,7 @@ body {
     text-align: center;
     direction: rtl;
     padding-top: 70px;
+    padding-bottom: 50px;
 }
 .clothing-card {
     border: none;
@@ -33,4 +34,21 @@ body {
 
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.7);
+}
+.navbar-scrolled {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    transition: background-color 0.3s;
+}
+
+.navbar {
+    background-color: rgba(0, 0, 0, 0.8);
+    transition: background-color 0.3s;
+}
+
+.navbar.navbar-scrolled {
+    background-color: transparent;
+}
+.Link {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Inherit the color from parent element */
 }

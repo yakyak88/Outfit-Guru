@@ -3,7 +3,6 @@ import { AppContext } from "../contexts/AppContext";
 
 const SavedSetsScreen = () => {
     const { completedSets, deleteSet } = useContext(AppContext);
-    console.log(completedSets);
 
     return (
         <div className="container">

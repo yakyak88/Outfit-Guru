@@ -5,7 +5,7 @@ import ClothingItemsScreen from "./components/ClothingItemsScreen";
 import SavedSetsScreen from "./components/SavedSetsScreen";
 import "./App.css";
 import NavigationMenu from "./components/NavigationMenu";
-import LogoBanner from "./components/LogoBanner";
+
 function App() {
     return (
         <Router>

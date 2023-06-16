@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { AppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const HomeScreen = () => {
     const {
@@ -9,9 +10,10 @@ const HomeScreen = () => {
         setType,
         selectedItems,
         setSelectedItems,
+        resetSelectedItems,
     } = useContext(AppContext);
     const navigate = useNavigate();
-    console.log(availableItems?.length);
+
     useEffect(() => {
         if (selectedItems.length === 3) {
             navigate("/");
@@ -23,15 +25,29 @@ const HomeScreen = () => {
         setType(itemType);
         navigate(`/items/${itemType}`);
     };
+
+    useEffect(() => {
+        resetSelectedItems();
+    }, []);
+
     return (
         availableItems?.length > 0 && (
             <div className="container">
                 <h1 className="mt-5 text-center ">OUTFIT_GURU</h1>
                 <div className="mt-5 text-center">
-                    <h5 className="mb-4 ">
-                        <span className="fw-bold">סטים שמורים:</span>{" "}
-                        {completedSets.length}
-                    </h5>
+                    <Link
+                        style={{
+                            textDecoration: "none", // Remove underline
+                            color: "inherit",
+                        }}
+                        to={"/saved-sets"}
+                    >
+                        {" "}
+                        <h5 className="mb-4 ">
+                            <span className="fw-bold">סטים שמורים:</span>{" "}
+                            {completedSets.length}
+                        </h5>
+                    </Link>
                     <h5 className="mb-4     ">
                         <span className="fw-bold">נעליים זמינות:</span>{" "}
                         {
