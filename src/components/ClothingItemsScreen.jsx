@@ -2,6 +2,10 @@ import React, { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
 import FilterPanel from "./FilterPanel";
+import {
+    getFirstRecommendation,
+    getSecondRecommendation,
+} from "../utils/recommendationAlgorithm";
 
 const ClothingItemsScreen = () => {
     const { type } = useParams();
@@ -56,16 +60,6 @@ const ClothingItemsScreen = () => {
         const nextIndex = (currentIndex + 1) % clothingTypes.length;
         return clothingTypes[nextIndex];
     };
-    const rateRemainingItems = () => {
-        if (selectedItems.length === 1) {
-            const firstItem = selectedItems[0];
-            console.log(firstItem);
-        }
-    };
-
-    useEffect(() => {
-        rateRemainingItems();
-    }, [selectedItems]);
 
     const handleButtonClick = (itemType, item) => {
         const newSelectedItems = [...selectedItems, item];
@@ -80,6 +74,25 @@ const ClothingItemsScreen = () => {
             const nextType = getNextType(itemType);
             navigate(`/items/${nextType}`);
         }
+    };
+
+    const getRecommendationPercentage = (item) => {
+        if (selectedItems.length > 0) {
+            if (selectedItems.length === 1) {
+                const firstItem = selectedItems[0];
+                const recommendation = getFirstRecommendation(firstItem, item);
+                return `${recommendation}%`;
+            } else if (selectedItems.length === 2) {
+                const [firstItem, secondItem] = selectedItems;
+                const recommendation = getSecondRecommendation(
+                    firstItem,
+                    secondItem,
+                    item
+                );
+                return `${recommendation}%`;
+            }
+        }
+        return "";
     };
 
     return (
@@ -115,7 +128,10 @@ const ClothingItemsScreen = () => {
                                 </p>
                                 {selectedItems.length > 0 && (
                                     <p className="card-text fs-6">
-                                        <strong> התאמה:</strong> 90%
+                                        <strong>התאמה:</strong>{" "}
+                                        {selectedItems.length > 0
+                                            ? getRecommendationPercentage(item)
+                                            : ""}
                                     </p>
                                 )}
                                 <button

@@ -48,7 +48,3 @@ body {
 .navbar.navbar-scrolled {
     background-color: transparent;
 }
-.Link {
-    text-decoration: none; /* Remove underline */
-    color: inherit; /* Inherit the color from parent element */
-}
