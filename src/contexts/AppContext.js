@@ -8,21 +8,40 @@ const AppContextProvider = ({ children }) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [completedSets, setCompletedSets] = useState([]);
     const [type, setType] = useState("");
+
     const removeItemsFromStock = (itemsToRemove) => {
-        setAvailableItems(
-            availableItems.filter((item) => !itemsToRemove.includes(item))
+        const newAvailableItems = availableItems.filter((item) => {
+            const matchingItem = itemsToRemove.find(
+                (selectedItem) =>
+                    selectedItem.type === item.type &&
+                    selectedItem.brand === item.brand
+            );
+            return !matchingItem;
+        });
+        setAvailableItems(newAvailableItems);
+        localStorage.setItem(
+            "availableItems",
+            JSON.stringify(newAvailableItems)
         );
     };
+
     const addToStock = (items) => {
-        setAvailableItems((prevItems) => [...prevItems, ...items]);
+        const newAvailableItems = [...availableItems, ...items];
+        setAvailableItems(newAvailableItems);
+        localStorage.setItem(
+            "availableItems",
+            JSON.stringify(newAvailableItems)
+        );
     };
 
     const deleteSet = (index) => {
         const newSets = [...completedSets];
         const deletedSet = newSets.splice(index, 1);
-        addToStock(deletedSet[0]); // deletedSet is an array of arrays, we need the first element
+        addToStock(deletedSet[0]);
         setCompletedSets(newSets);
+        localStorage.setItem("completedSets", JSON.stringify(newSets));
     };
+
     const resetSelectedItems = () => {
         setSelectedItems([]);
     };
@@ -36,13 +55,26 @@ const AppContextProvider = ({ children }) => {
                 const data = await response.data;
 
                 setAvailableItems(data);
+                localStorage.setItem("availableItems", JSON.stringify(data));
             } catch (error) {
                 console.log("Error fetching data from the API:", error);
             }
         };
 
-        fetchData();
+        const savedAvailableItems = localStorage.getItem("availableItems");
+        const savedCompletedSets = localStorage.getItem("completedSets");
+
+        if (savedAvailableItems && savedCompletedSets) {
+            setAvailableItems(JSON.parse(savedAvailableItems));
+            setCompletedSets(JSON.parse(savedCompletedSets));
+        } else {
+            fetchData();
+        }
     }, []);
+
+    useEffect(() => {
+        localStorage.setItem("completedSets", JSON.stringify(completedSets));
+    }, [completedSets]);
 
     return (
         <AppContext.Provider

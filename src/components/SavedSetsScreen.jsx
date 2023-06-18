@@ -32,10 +32,10 @@ const SavedSetsScreen = () => {
                                     </div>
                                 ))}
                                 <button
-                                    className="btn btn-danger mt-3"
+                                    className="btn btn-dark mt-3"
                                     onClick={() => deleteSet(index)}
                                 >
-                                    מחק סט
+                                    <i class="bi bi-trash"></i>{" "}
                                 </button>
                             </div>
                         </div>

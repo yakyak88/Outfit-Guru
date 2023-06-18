@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
 import FilterPanel from "./FilterPanel";
 import {
-    getFirstRecommendation,
-    getSecondRecommendation,
+    getPairRecommendation,
+    getTripleRecommendation,
 } from "../utils/recommendationAlgorithm";
 
 const ClothingItemsScreen = () => {
@@ -20,6 +20,7 @@ const ClothingItemsScreen = () => {
 
     const [showFilters, setShowFilters] = useState(false);
     const [filters, setFilters] = useState({ color: [], size: [] });
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
         // Reset filters when the type changes
@@ -68,8 +69,12 @@ const ClothingItemsScreen = () => {
         if (newSelectedItems.length === 3) {
             removeItemsFromStock(newSelectedItems);
             setCompletedSets((prevSets) => [...prevSets, newSelectedItems]);
-            alert("הסט נבחר בהצלחה!");
-            navigate("/");
+            setShowSuccessMessage(true);
+
+            setTimeout(() => {
+                setShowSuccessMessage(false);
+                navigate("/");
+            }, 1000);
         } else {
             const nextType = getNextType(itemType);
             navigate(`/items/${nextType}`);
@@ -80,73 +85,93 @@ const ClothingItemsScreen = () => {
         if (selectedItems.length > 0) {
             if (selectedItems.length === 1) {
                 const firstItem = selectedItems[0];
-                const recommendation = getFirstRecommendation(firstItem, item);
-                return `${recommendation}%`;
+                const recommendation = getPairRecommendation(firstItem, item);
+                return Math.round(recommendation);
             } else if (selectedItems.length === 2) {
                 const [firstItem, secondItem] = selectedItems;
-                const recommendation = getSecondRecommendation(
+                const recommendation = getTripleRecommendation(
                     firstItem,
                     secondItem,
                     item
                 );
-                return `${recommendation}%`;
+                return Math.round(recommendation);
             }
         }
-        return "";
+        return 0;
     };
+
+    const sortedItems = itemsToDisplay
+        .slice()
+        .sort(
+            (a, b) =>
+                getRecommendationPercentage(b) - getRecommendationPercentage(a)
+        );
 
     return (
         <div className="container">
-            <FilterPanel
-                showFilters={showFilters}
-                colors={colors}
-                sizes={sizes}
-                filters={filters}
-                handleFilterChange={handleFilterChange}
-                toggleFilters={() => setShowFilters(!showFilters)}
-            />
-
-            <h1 className="mt-5 text-center">בחירת - {type}</h1>
-            <div className="row mt-5">
-                {itemsToDisplay.map((item) => (
-                    <div className="col-6 col-md-4 mb-4" key={item.id}>
-                        <div className="card clothing-card">
-                            <img
-                                src={`https://via.placeholder.com/300x200?text=${item.type}`}
-                                className="card-img-top"
-                                alt={item.type}
-                            />
-                            <div className="card-body">
-                                <p className="card-text fs-6">
-                                    <strong>מותג:</strong> {item.brand}
-                                </p>
-                                <p className="card-text fs-6">
-                                    <strong>צבע:</strong> {item.color}
-                                </p>
-                                <p className="card-text fs-6">
-                                    <strong>מידה:</strong> {item.size}
-                                </p>
-                                {selectedItems.length > 0 && (
-                                    <p className="card-text fs-6">
-                                        <strong>התאמה:</strong>{" "}
-                                        {selectedItems.length > 0
-                                            ? getRecommendationPercentage(item)
-                                            : ""}
-                                    </p>
-                                )}
-                                <button
-                                    className="btn btn-light border"
-                                    onClick={() =>
-                                        handleButtonClick(type, item)
-                                    }
-                                >
-                                    בחירה
-                                </button>
-                            </div>
-                        </div>
+            {showSuccessMessage ? (
+                <div className="text-center mt-3">
+                    <div className="spinner-border text-success" role="status">
+                        <span className="visually-hidden">Loading...</span>
                     </div>
-                ))}
-            </div>
+                    <p className="mt-2 text-success">הסט נשמר</p>
+                </div>
+            ) : (
+                <>
+                    <FilterPanel
+                        showFilters={showFilters}
+                        colors={colors}
+                        sizes={sizes}
+                        filters={filters}
+                        handleFilterChange={handleFilterChange}
+                        toggleFilters={() => setShowFilters(!showFilters)}
+                    />
+
+                    <h1 className="mt-5 text-center">בחירת - {type}</h1>
+                    <div className="row mt-5">
+                        {sortedItems.map((item) => (
+                            <div className="col-6 col-md-4 mb-4" key={item.id}>
+                                <div className="card clothing-card">
+                                    <img
+                                        src={`https://via.placeholder.com/300x200?text=${item.type}`}
+                                        className="card-img-top"
+                                        alt={item.type}
+                                    />
+                                    <div className="card-body">
+                                        <p className="card-text fs-6">
+                                            <strong>מותג:</strong> {item.brand}
+                                        </p>
+                                        <p className="card-text fs-6">
+                                            <strong>צבע:</strong> {item.color}
+                                        </p>
+                                        <p className="card-text fs-6">
+                                            <strong>מידה:</strong> {item.size}
+                                        </p>
+                                        {selectedItems.length > 0 && (
+                                            <p className="card-text fs-6">
+                                                <strong>התאמה:</strong>{" "}
+                                                {selectedItems.length > 0
+                                                    ? `${getRecommendationPercentage(
+                                                          item
+                                                      )}%`
+                                                    : ""}
+                                            </p>
+                                        )}
+                                        <button
+                                            className="btn btn-light border"
+                                            onClick={() =>
+                                                handleButtonClick(type, item)
+                                            }
+                                        >
+                                            בחירה
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </>
+            )}
         </div>
     );
 };

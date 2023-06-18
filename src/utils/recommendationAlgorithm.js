@@ -126,19 +126,19 @@ const sizeMatchRates = {
                 48: 10,
             },
             L: {
-                30: 85,
-                31: 85,
+                30: 25,
+                31: 30,
                 32: 50,
-                34: 25,
-                35: 15,
-                36: 15,
-                39: 15,
-                42: 15,
-                43: 15,
+                34: 70,
+                35: 70,
+                36: 60,
+                39: 45,
+                42: 25,
+                43: 25,
                 48: 15,
             },
             XL: {
-                30: 20,
+                30: 15,
                 31: 25,
                 32: 25,
                 34: 35,
@@ -198,7 +198,7 @@ const getSizeRecommendation = (item1, item2) => {
     return sizeMatchRates[item1.type]?.[item2.type]?.[item1.size]?.[item2.size];
 };
 
-export const getFirstRecommendation = (item1, item2) => {
+export const getPairRecommendation = (item1, item2) => {
     return (
         (getColorRecommendation(item1, item2) +
             getSizeRecommendation(item1, item2)) /
@@ -206,10 +206,10 @@ export const getFirstRecommendation = (item1, item2) => {
     );
 };
 
-export const getSecondRecommendation = (item1, item2, item3) => {
-    const first = getFirstRecommendation(item1, item2);
-    const second = getFirstRecommendation(item1, item3);
-    const third = getFirstRecommendation(item2, item3);
+export const getTripleRecommendation = (item1, item2, item3) => {
+    const first = getPairRecommendation(item1, item2);
+    const second = getPairRecommendation(item1, item3);
+    const third = getPairRecommendation(item2, item3);
 
     return (first + second + third) / 3;
 };
