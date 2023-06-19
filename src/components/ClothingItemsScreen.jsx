@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, json } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
 import FilterPanel from "./FilterPanel";
 import {
@@ -23,7 +23,6 @@ const ClothingItemsScreen = () => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
-        // Reset filters when the type changes
         setFilters({ color: [], size: [] });
     }, [type]);
 
@@ -67,8 +66,15 @@ const ClothingItemsScreen = () => {
         setSelectedItems(newSelectedItems);
 
         if (newSelectedItems.length === 3) {
-            removeItemsFromStock(newSelectedItems);
-            setCompletedSets((prevSets) => [...prevSets, newSelectedItems]);
+            const additionalItems = removeItemsFromStock(newSelectedItems);
+            setCompletedSets((prevSets) => [
+                ...prevSets,
+                {
+                    setItems: newSelectedItems,
+                    additionalItems: additionalItems,
+                    creationDate: new Date().toISOString(),
+                },
+            ]);
             setShowSuccessMessage(true);
 
             setTimeout(() => {

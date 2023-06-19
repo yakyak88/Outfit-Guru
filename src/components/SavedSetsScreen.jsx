@@ -18,7 +18,7 @@ const SavedSetsScreen = () => {
                                 <h5 className="card-title">
                                     סט מספר {index + 1}
                                 </h5>
-                                {set.map((item) => (
+                                {set.setItems.map((item) => (
                                     <div key={item.id}>
                                         <img
                                             src={`https://via.placeholder.com/150?text=${item.type}`}
@@ -31,6 +31,12 @@ const SavedSetsScreen = () => {
                                         </p>
                                     </div>
                                 ))}
+                                <p className="card-text mt-4">
+                                    תאריך יצירה:{" "}
+                                    {new Date(
+                                        set.creationDate
+                                    ).toLocaleString()}
+                                </p>
                                 <button
                                     className="btn btn-dark mt-3"
                                     onClick={() => deleteSet(index)}

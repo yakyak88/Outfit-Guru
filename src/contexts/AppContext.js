@@ -9,24 +9,31 @@ const AppContextProvider = ({ children }) => {
     const [completedSets, setCompletedSets] = useState([]);
     const [type, setType] = useState("");
 
-    const removeItemsFromStock = (itemsToRemove) => {
-        const newAvailableItems = availableItems.filter((item) => {
-            const matchingItem = itemsToRemove.find(
-                (selectedItem) =>
-                    selectedItem.type === item.type &&
-                    selectedItem.brand === item.brand
-            );
-            return !matchingItem;
+    const removeItemsFromStock = (itemsInSets) => {
+        const additionalItemsToRemove = availableItems.filter((item) => {
+            for (let i = 0; i < itemsInSets.length; i++) {
+                if (
+                    itemsInSets[i].type === item.type &&
+                    itemsInSets[i].brand === item.brand
+                ) {
+                    return true;
+                }
+            }
+            return false;
         });
-        setAvailableItems(newAvailableItems);
-        localStorage.setItem(
-            "availableItems",
-            JSON.stringify(newAvailableItems)
+        setAvailableItems(
+            availableItems.filter(
+                (item) => !additionalItemsToRemove.includes(item)
+            )
         );
+
+        localStorage.setItem("availableItems", JSON.stringify(availableItems));
+        return additionalItemsToRemove;
     };
 
     const addToStock = (items) => {
-        const newAvailableItems = [...availableItems, ...items];
+        const newAvailableItems = [...availableItems, ...items.additionalItems];
+
         setAvailableItems(newAvailableItems);
         localStorage.setItem(
             "availableItems",
@@ -36,9 +43,10 @@ const AppContextProvider = ({ children }) => {
 
     const deleteSet = (index) => {
         const newSets = [...completedSets];
-        const deletedSet = newSets.splice(index, 1);
-        addToStock(deletedSet[0]);
-        setCompletedSets(newSets);
+        const deletedSet = completedSets[index];
+        addToStock(deletedSet);
+
+        setCompletedSets(completedSets.filter((set) => set !== deletedSet));
         localStorage.setItem("completedSets", JSON.stringify(newSets));
     };
 
@@ -75,6 +83,10 @@ const AppContextProvider = ({ children }) => {
     useEffect(() => {
         localStorage.setItem("completedSets", JSON.stringify(completedSets));
     }, [completedSets]);
+
+    useEffect(() => {
+        localStorage.setItem("availableItems", JSON.stringify(availableItems));
+    }, [availableItems]);
 
     return (
         <AppContext.Provider
