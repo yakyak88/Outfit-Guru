@@ -32,12 +32,12 @@ const SavedSetsScreen = () => {
                                     </div>
                                 ))}
                                 <p className="card-text mt-3">
-                                    זמן בנייה:{" "}
+                                    <strong>זמן בנייה: </strong>
                                     {(set.buildTime / 1000).toFixed(2)} שניות
                                 </p>
 
                                 <p className="card-text mt-2">
-                                    תאריך יצירה:{" "}
+                                    <strong> תאריך יצירה: </strong>
                                     {new Date(
                                         set.creationDate
                                     ).toLocaleString()}

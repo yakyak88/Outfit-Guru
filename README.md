@@ -34,3 +34,15 @@ Recommendation Score Calculation
 A pair of clothing items gets a recommendation score by averaging the color and size match rates via getPairRecommendation(item1, item2). For three items, the function getTripleRecommendation(item1, item2, item3) calculates the average of the scores of all possible pairs.
 
 Through this algorithm, Outfit-Guru estimates the compatibility between different clothing items, creating a personalized outfit recommendation system.
+
+# Why I Chose React Context API for State Management?
+
+I adopted React Context API because it's simple, scalable, and seamlessly integrates with React. It's a part of React itself, so we didn't need extra libraries. It handles my state needs without complicating the codebase. Plus, the use of useContext hook makes state consumption a breeze in function components.
+
+# Navigation Menu
+
+The NavigationMenu component represents a flexible and responsive approach to managing site navigation. Using React's useState hook, it dynamically updates the menu's state based on user interactions. This empowers a seamless transition between open and closed states. The use of the Link component from react-router-dom provides a user-friendly navigation experience without refreshing the page, enhancing the overall performance and feel of the application. The decision to include a "closeMenu" function when each navigation link is clicked ensures that the menu won't stay open after a user has selected their destination, reducing visual clutter and focusing user attention. This choice reflects our commitment to a clean, intuitive user experience.
+
+# Saved Sets Screen
+
+The SavedSetsScreen displays a list of saved clothing sets, allowing users to delete them as needed. I use React's Context API to manage the state of these sets. The useContext hook provides direct access to the completedSets and deleteSet functions from our Context, facilitating efficient state management.

@@ -9,7 +9,6 @@ const AppContextProvider = ({ children }) => {
     const [completedSets, setCompletedSets] = useState([]);
     const [type, setType] = useState("");
     const [startTime, setStartTime] = useState(null);
-    const [endTime, setEndTime] = useState(null);
 
     const removeItemsFromStock = (itemsInSets) => {
         const additionalItemsToRemove = availableItems.filter((item) => {
