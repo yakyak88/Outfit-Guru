@@ -16,7 +16,11 @@ const NavigationMenu = () => {
         <div style={{ direction: "ltr" }}>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div className="container">
-                    <div></div>
+                    <Link className="navbar-brand" to="/">
+                        <div className="text-white">
+                            {isOpen ? "" : "Outfit_Guru"}{" "}
+                        </div>
+                    </Link>
                     <div style={{ direction: "rtl" }}>
                         <button
                             className="navbar-toggler"

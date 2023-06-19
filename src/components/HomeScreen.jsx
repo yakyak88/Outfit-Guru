@@ -56,7 +56,7 @@ const HomeScreen = () => {
                     <h3 className="fs-3">{completedSets.length}</h3>
                 </Link>
             </div>
-            <div className="my-5">.</div>
+
             <div className="row mt-5 ">
                 <div className="col">
                     <div className="text-center">
