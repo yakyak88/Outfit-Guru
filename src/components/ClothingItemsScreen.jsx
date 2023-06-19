@@ -15,6 +15,7 @@ const ClothingItemsScreen = () => {
         setSelectedItems,
         removeItemsFromStock,
         setCompletedSets,
+        startTime,
     } = useContext(AppContext);
     const navigate = useNavigate();
 
@@ -66,6 +67,9 @@ const ClothingItemsScreen = () => {
         setSelectedItems(newSelectedItems);
 
         if (newSelectedItems.length === 3) {
+            const endTime = new Date();
+            const buildTime = endTime - startTime;
+
             const additionalItems = removeItemsFromStock(newSelectedItems);
             setCompletedSets((prevSets) => [
                 ...prevSets,
@@ -73,6 +77,7 @@ const ClothingItemsScreen = () => {
                     setItems: newSelectedItems,
                     additionalItems: additionalItems,
                     creationDate: new Date().toISOString(),
+                    buildTime: buildTime,
                 },
             ]);
             setShowSuccessMessage(true);

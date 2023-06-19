@@ -31,7 +31,12 @@ const SavedSetsScreen = () => {
                                         </p>
                                     </div>
                                 ))}
-                                <p className="card-text mt-4">
+                                <p className="card-text mt-3">
+                                    זמן בנייה:{" "}
+                                    {(set.buildTime / 1000).toFixed(2)} שניות
+                                </p>
+
+                                <p className="card-text mt-3">
                                     תאריך יצירה:{" "}
                                     {new Date(
                                         set.creationDate

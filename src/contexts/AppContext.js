@@ -8,6 +8,8 @@ const AppContextProvider = ({ children }) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [completedSets, setCompletedSets] = useState([]);
     const [type, setType] = useState("");
+    const [startTime, setStartTime] = useState(null);
+    const [endTime, setEndTime] = useState(null);
 
     const removeItemsFromStock = (itemsInSets) => {
         const additionalItemsToRemove = availableItems.filter((item) => {
@@ -101,6 +103,8 @@ const AppContextProvider = ({ children }) => {
                 completedSets,
                 deleteSet,
                 resetSelectedItems,
+                startTime,
+                setStartTime,
             }}
         >
             {children}

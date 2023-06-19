@@ -11,6 +11,7 @@ const HomeScreen = () => {
         selectedItems,
         setSelectedItems,
         resetSelectedItems,
+        setStartTime,
     } = useContext(AppContext);
     const navigate = useNavigate();
 
@@ -22,6 +23,7 @@ const HomeScreen = () => {
     }, [selectedItems, navigate, setSelectedItems]);
 
     const handleButtonClick = (itemType) => {
+        setStartTime(new Date());
         setType(itemType);
         navigate(`/items/${itemType}`);
     };
